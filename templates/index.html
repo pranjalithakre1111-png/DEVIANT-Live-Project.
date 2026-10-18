@@ -1,50 +1,231 @@
-D
-DEVIANTPUBLIC FOOTPRINT INTELLIGENCE
-WORKSPACE
-◈ Live footprint scan
-▤ Findings report
-◎ Methodology
-Live source connected
-GitHub REST API · public data only
-DEVIANT prototype
-Privacy-first · Read-only
-DIGITAL SAFETY / INTELLIGENCE
-Public Footprint Scanner
-Review publicly visible GitHub profile and repository metadata.
 
-API READY
-Authorized, public-data scanning only Scan your own account or an account you have permission to assess. This tool does not access private data.
-01 / TARGET
-Start a live scan
-REAL API · NOT SAMPLE DATA
-GitHub username
-github.com/
-octocat
-Run scan ↗
-Example test account: octocat. Data is fetched live from GitHub when you scan.
-02 / SCAN RESULTS
-Exposure overview
-PUBLIC PROFILE
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080e18">
+  <meta name="description" content="DEVIANT public GitHub footprint intelligence dashboard">
+  <title>DEVIANT | Public Footprint Intelligence</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <div class="app-shell">
 
-—
-@username ↗
-EXPOSURE INDICATOR
-0
-/100
-Lower
-Prototype heuristic, not a validated security rating.
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div>
+          <strong>DEVIANT</strong>
+          <small>PUBLIC FOOTPRINT INTELLIGENCE</small>
+        </div>
+      </div>
 
-FINDINGS DETECTED
-0
-Items to review manually
-Public repositories checked0
-03 / EVIDENCE
-Findings & recommendations
-GitHub REST API
-✓
-No review flags found
-No configured exposure indicators were found in the fields checked. This does not mean the account has no privacy risks.
+      <div class="side-label">WORKSPACE</div>
 
-Methodology & limitations
-Download JSON reportScan another username
-DEVIANT · Educational prototype · Live public GitHub data · No private account access
+      <a class="nav-item active" href="#scanner">
+        <span>◈</span> Live footprint scan
+      </a>
+      <a class="nav-item" href="#results">
+        <span>▤</span> Findings report
+      </a>
+      <a class="nav-item" href="#methodology">
+        <span>◎</span> Methodology
+      </a>
+
+      <div class="sidebar-note">
+        <span class="live-dot"></span>
+        <strong>Live source connected</strong>
+        <small>GitHub REST API · public data only</small>
+      </div>
+
+      <div class="side-footer">
+        DEVIANT prototype<br>
+        Privacy-first · Read-only
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">DIGITAL SAFETY / INTELLIGENCE</div>
+          <h1>Public Footprint Scanner</h1>
+          <p>Review publicly visible GitHub profile and repository metadata.</p>
+        </div>
+        <div class="connection">
+          <span class="live-dot"></span> API READY
+        </div>
+      </header>
+
+      <div class="notice">
+        <strong>Authorized, public-data scanning only</strong>
+        <span>
+          Scan your own account or an account you have permission to assess.
+          This tool does not access private data.
+        </span>
+      </div>
+
+      <section class="scan-panel" id="scanner">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">01 / TARGET</div>
+            <h2>Start a live scan</h2>
+          </div>
+          <span class="pill">REAL API · NOT SAMPLE DATA</span>
+        </div>
+
+        <form id="scan-form">
+          <label for="username">GitHub username</label>
+
+          <div class="input-row">
+            <span class="input-prefix">github.com/</span>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter GitHub username"
+              autocomplete="off"
+              spellcheck="false"
+              maxlength="39"
+              required
+            >
+            <button type="submit" id="scan-button">
+              Run scan <span>↗</span>
+            </button>
+          </div>
+
+          <div class="helper">
+            Example test account:
+            <button type="button" class="text-button" id="example-button">
+              octocat
+            </button>.
+            Data is fetched live from GitHub when you scan.
+          </div>
+
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section id="results" class="hidden">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">02 / SCAN RESULTS</div>
+            <h2>Exposure overview</h2>
+          </div>
+          <span id="scan-time" class="scan-time">Scan report</span>
+        </div>
+
+        <div class="metrics">
+          <article class="metric profile-metric">
+            <div class="metric-label">PUBLIC PROFILE</div>
+
+            <div class="profile-row">
+              <img id="avatar" src="" alt="GitHub profile avatar">
+              <div>
+                <h3 id="profile-name">—</h3>
+                <a id="profile-link" href="#" target="_blank"
+                   rel="noopener noreferrer">@username ↗</a>
+              </div>
+            </div>
+
+            <p id="profile-bio" class="bio">
+              Public profile information will appear here.
+            </p>
+          </article>
+
+          <article class="metric">
+            <div class="metric-label">EXPOSURE INDICATOR</div>
+
+            <div class="score-row">
+              <strong id="score" class="score">0</strong>
+              <span>/100</span>
+            </div>
+
+            <p id="level" class="level">Not assessed</p>
+
+            <div
+              class="score-track"
+              role="progressbar"
+              aria-label="Exposure indicator"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <div id="score-fill"></div>
+            </div>
+
+            <p id="score-note" class="muted">
+              Prototype heuristic, not a validated security rating.
+            </p>
+          </article>
+
+          <article class="metric">
+            <div class="metric-label">FINDINGS DETECTED</div>
+            <div id="finding-count" class="big-number">0</div>
+
+            <p class="muted">Items to review manually</p>
+
+            <div class="mini-stat">
+              <span>Public repositories checked</span>
+              <strong id="repo-count">0</strong>
+            </div>
+
+            <div class="mini-stat">
+              <span>Source</span>
+              <strong id="source-label">GitHub REST API</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-heading findings-heading">
+          <div>
+            <div class="eyebrow">03 / EVIDENCE</div>
+            <h2>Findings &amp; recommendations</h2>
+          </div>
+          <span class="source-label">PUBLIC DATA REVIEW</span>
+        </div>
+
+        <div id="findings-list" class="findings-list"></div>
+
+        <div id="empty-findings" class="empty hidden">
+          <div class="empty-icon">✓</div>
+          <h3>No review flags found</h3>
+          <p>
+            No configured exposure indicators were found in the fields
+            checked. This does not mean the account has no privacy risks.
+          </p>
+        </div>
+
+        <details class="methodology" id="methodology">
+          <summary>Methodology &amp; limitations</summary>
+          <p>
+            DEVIANT reviews selected publicly accessible GitHub profile
+            and repository metadata. Findings depend on the indicators
+            configured in the prototype.
+          </p>
+          <ul id="limitations">
+            <li>Only public information is assessed.</li>
+            <li>Results are indicators for manual review, not proof of risk.</li>
+            <li>This prototype does not access private accounts or data.</li>
+          </ul>
+        </details>
+
+        <div class="report-actions">
+          <button type="button" class="secondary-button" id="download-report">
+            Download JSON report ↓
+          </button>
+
+          <button type="button" class="secondary-button" id="new-scan">
+            Scan another username ↗
+          </button>
+        </div>
+      </section>
+
+      <footer>
+        DEVIANT · Educational prototype · Live public GitHub data ·
+        No private account access
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
