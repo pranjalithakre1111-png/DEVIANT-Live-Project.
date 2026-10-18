@@ -287,3 +287,28 @@ function renderReport(report) {
 }
 
 renderHistory();
+
+
+const clearHistoryButton = document.getElementById("clear-history");
+
+if (clearHistoryButton) {
+  clearHistoryButton.addEventListener("click", () => {
+    const history = getHistory();
+
+    if (history.length === 0) {
+      alert("Scan history is already empty.");
+      return;
+    }
+
+    const confirmed = confirm(
+      "Are you sure you want to clear all saved scan history from this browser?"
+    );
+
+    if (!confirmed) return;
+
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+
+    alert("Scan history cleared successfully.");
+  });
+}
